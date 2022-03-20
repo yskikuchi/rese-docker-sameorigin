@@ -1,13 +1,14 @@
-FROM node:14.15.0-alpine
-RUN mkdir -p /var/www/nuxt
+FROM node:16.14-alpine
+RUN mkdir -p /var/www/html/nuxt
 # timezone
 ARG TZ
-WORKDIR /var/www/nuxt
-COPY ./src/nuxt/ /var/www/nuxt/
+WORKDIR /var/www/html/nuxt
+COPY ./src/nuxt/ /var/www/html/nuxt/
 
 RUN apk update && \
-    apk upgrade && \
-    yarn install
+    apk upgrade
+
+RUN yarn install
 
 EXPOSE 3000
 
