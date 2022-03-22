@@ -36,3 +36,16 @@ services:
       TZ: ${TZ}
     volumes:
       - mysql-volume:/var/lib/mysql
+
+  nuxt:
+    build:
+      context: .
+      dockerfile: ./docker/node/Dockerfile
+      args:
+        - TZ=${TZ}
+    volumes:
+      - ./src/nuxt:/var/www/html/nuxt
+    ports:
+      - ${FRONT_PORT}:3000
+    depends_on:
+      - nginx
