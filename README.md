@@ -50,79 +50,33 @@ Rese グループの飲食店予約サービスです。
 ```
 $ git clone https://github.com/yskikuchi/rese-docker-sameorigin
 $ cd rese-docker-sameorigin
-$ cp .env.example .env
-```
-envファイルに、任意のPORT、DBの情報を入力
-
-```
-WEB_PORT=
-FRONT_PORT=
-DB_PORT=
-
-DB_NAME=
-DB_USER=
-DB_PASSWORD=
-DB_ROOT_PASSWORD=
+$ cp .env.local.example .env
 ```
 
+srcディレクトリ、nuxtディレクトリ以下でもenvファイルを設定
+
+```
+$ cd src
+$ cp .env.local.example .env
+$ cd nuxt
+$ cp .env.local.example .env
+```
+
+dockerを立ち上げる
 
 ```
 $ docker compose up -d --build
 ```
 
-### 1.laravelの環境設定
+APP_KEYの設定、マイグレーション、シーディングを実行
 ```
 $ docker compose exec php /bin/bash
-$ composer install
-$ cp .env.local.example .env
-$ php artisan key:generate
+$ sh startup.sh
 ```
 
-上で設定したDB情報に基づいて、.envファイルのデータベースの情報を修正
-```
-DB_CONNECTION=mysql
-DB_HOST=mysql
-DB_PORT=3306
-DB_DATABASE=
-DB_USERNAME=
-DB_PASSWORD=
-```
-
-修正後にマイグレーション、シーディングを実行
-
-```
-$ php artisan migrate
-$ php artisan db:seed
-```
-
-Stripe決済用のパブリックキー、シークレットキーを設定
+src,nuxtそれぞれのenvファイルに、Stripe決済用のパブリックキー、シークレットキーを設定
 
 ```
 STRIPE_PUBLIC_KEY=
 STRIPE_SECRET_KEY=
 ```
-
-Laravel Sanctum認証用のドメインを設定
-
-```
-SANCTUM_STATEFUL_DOMAINS=localhost:{$FRONT_PORTで設定した値}
-```
-
-### 2.nuxtの環境設定
-
-```
-$ docker compose exec nuxt /bin/sh
-$ cp .env.local.example .env
-```
-
-```
-API_URL=http://localhost:{$WEB_PORTとして設定した値}
-API_BASE_URL=http://localhost:{$WEB_PORTとして設定した値}/api
-NODE_ENV=development
-STRIPE_PUBLIC_KEY=
-```
-
-### 3. localhostにアクセス
-
-localhostで{WEB_PORT}、{FRONT_PORT}で設定したポート番号を使用してアクセスしてください。
-
