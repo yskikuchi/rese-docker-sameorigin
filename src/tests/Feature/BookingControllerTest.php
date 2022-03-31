@@ -62,7 +62,7 @@ class BookingControllerTest extends TestCase
             'date' => $tomorrow,
             'time' => '12:00',
             'number_of_people' => 10,
-            'menu_id' => $menu,
+            'menu_id' => $menu->id,
         ];
         $response = $this->post('/api/booking', $data);
         $response -> assertStatus(201);
