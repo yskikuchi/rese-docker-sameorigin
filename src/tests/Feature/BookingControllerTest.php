@@ -8,10 +8,12 @@ use Tests\TestCase;
 use App\Models\Booking;
 use App\Models\User;
 use App\Models\Shop;
+use App\Models\Menu;
 use Database\Seeders\DatabaseSeeder;
 use Database\Seeders\BookingSeeder;
 use Database\Seeders\UserSeeder;
 use Database\Seeders\ShopSeeder;
+use Database\Seeders\MenuSeeder;
 
 class BookingControllerTest extends TestCase
 {
@@ -26,6 +28,7 @@ class BookingControllerTest extends TestCase
         parent::setUp();
         $this->user = User::factory()->create();
         $this->seed(ShopSeeder::class);
+        $this->seed(MenuSeeder::class);
         $this->seed(BookingSeeder::class);
     }
     public function test_booking_index()
@@ -42,6 +45,7 @@ class BookingControllerTest extends TestCase
                     'date',
                     'time',
                     'number_of_people',
+                    'menu_id',
                 ]
             ]
         ]);
@@ -51,12 +55,14 @@ class BookingControllerTest extends TestCase
         $tomorrow = date('Y-m-d', strtotime('2day'));
         $user = User::first();
         $shop = Shop::first();
+        $menu = Menu::where('shop_id',$shop->id)->first();
         $data = [
             'user_id' => $user->id,
             'shop_id' => $shop->id,
             'date' => $tomorrow,
             'time' => '12:00',
             'number_of_people' => 10,
+            'menu_id' => $menu->id,
         ];
         $response = $this->post('/api/booking', $data);
         $response -> assertStatus(201);
@@ -84,6 +90,7 @@ class BookingControllerTest extends TestCase
             'date' => $booking->date,
             'time' => '20:00',
             'number_of_people' => 13,
+            'menu_id' => $booking->menu_id
         ];
         $response = $this->put('/api/booking/'. $booking->id, $data);
         $response->assertStatus(200);
