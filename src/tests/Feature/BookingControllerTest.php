@@ -8,6 +8,7 @@ use Tests\TestCase;
 use App\Models\Booking;
 use App\Models\User;
 use App\Models\Shop;
+use App\Models\Menu;
 use Database\Seeders\DatabaseSeeder;
 use Database\Seeders\BookingSeeder;
 use Database\Seeders\UserSeeder;
@@ -54,13 +55,14 @@ class BookingControllerTest extends TestCase
         $tomorrow = date('Y-m-d', strtotime('2day'));
         $user = User::first();
         $shop = Shop::first();
+        $menu = Menu::where('shop_id',$shop->id)->first();
         $data = [
             'user_id' => $user->id,
             'shop_id' => $shop->id,
             'date' => $tomorrow,
             'time' => '12:00',
             'number_of_people' => 10,
-            'menu_id' => 1,
+            'menu_id' => $menu,
         ];
         $response = $this->post('/api/booking', $data);
         $response -> assertStatus(201);
