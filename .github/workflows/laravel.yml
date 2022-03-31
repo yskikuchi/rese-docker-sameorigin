@@ -32,6 +32,7 @@ jobs:
         run: php artisan key:generate --env=testing
       - name: migrate
         working-directory: ./src
+        run: cat .env.testing
         run: php artisan migrate --force
       - name: seeding
         working-directory: ./src
