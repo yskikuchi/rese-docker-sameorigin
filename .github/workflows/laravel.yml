@@ -3,8 +3,12 @@ name: Laravel
 on:
   push:
     branches: [main]
+    paths:
+      - 'src/**'
   pull_request:
     branches: [main]
+    paths:
+      - 'src/**'
 
 jobs:
   laravel-tests:
@@ -25,17 +29,23 @@ jobs:
           php-version: "7.4"
       - uses: actions/checkout@v3
       - name: Copy .env.testing
+        working-directory: ./src
         run: php -r "file_exists('.env.testing') || copy('.env.example', '.env');"
       - name: Install Dependencies
+        working-directory: ./src
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
       - name: Generate key
+        working-directory: ./src
         run: php artisan key:generate
+      - name: migrate
+        working-directory: ./src
+        run: php artisan migrate
+      - name: seeding
+        working-directory: ./src
+        run: php artisan db:seed
       - name: Directory Permissions
+        working-directory: ./src
         run: chmod -R 777 storage bootstrap/cache
-      - name: Create Database
-        run: |
-          mkdir -p database
-          touch database/database.sqlite
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         env:
           DB_CONNECTION: mysql
