@@ -15,7 +15,13 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: test
           MYSQL_DATABASE: resepj_test
-
+    env:
+        DB_CONNECTION: mysql
+        DB_HOST: 127.0.0.1
+        DB_PORT: 3306
+        DB_DATABASE: resepj_test
+        DB_USER_NAME: root
+        DB_PASSWORD: test
     steps:
       - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
         with:
@@ -23,21 +29,18 @@ jobs:
       - uses: actions/checkout@v3
       - name: Copy .env.testing
         working-directory: ./src
-        run: php -r "file_exists('.env.testing') || copy('.env.example', '.env');"
+        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
       - name: Install Dependencies
         working-directory: ./src
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
       - name: Generate key
         working-directory: ./src
-        run: php artisan key:generate --env=testing
+        run: php artisan key:generate
       - name: migrate
         working-directory: ./src
         run: |
           cat .env.testing
           php artisan migrate --force
-      - name: seeding
-        working-directory: ./src
-        run: php artisan db:seed
       - name: Directory Permissions
         working-directory: ./src
         run: chmod -R 777 storage bootstrap/cache
