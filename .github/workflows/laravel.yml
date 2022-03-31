@@ -39,11 +39,10 @@ jobs:
       - name: migrate
         working-directory: ./src
         run: |
-          cat .env
           php artisan migrate --force
       - name: Directory Permissions
         working-directory: ./src
         run: chmod -R 777 storage bootstrap/cache
       - name: Execute tests (Unit and Feature tests) via PHPUnit
-
+        working-directory: ./src
         run: vendor/bin/phpunit
