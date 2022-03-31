@@ -90,6 +90,7 @@ class BookingControllerTest extends TestCase
             'date' => $booking->date,
             'time' => '20:00',
             'number_of_people' => 13,
+            'menu_id' => $booking->menu_id
         ];
         $response = $this->put('/api/booking/'. $booking->id, $data);
         $response->assertStatus(200);
