@@ -27,7 +27,7 @@ jobs:
         with:
           php-version: "7.4"
       - uses: actions/checkout@v3
-      - name: Copy .env.testing
+      - name: Copy .env
         working-directory: ./src
         run: php -r "file_exists('.env') || copy('.env.example', '.env');"
       - name: Install Dependencies
@@ -39,7 +39,7 @@ jobs:
       - name: migrate
         working-directory: ./src
         run: |
-          cat .env.testing
+          cat .env
           php artisan migrate --force
       - name: Directory Permissions
         working-directory: ./src
