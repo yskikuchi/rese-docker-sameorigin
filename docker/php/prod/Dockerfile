@@ -26,6 +26,7 @@ RUN apt-get update && \
 
 RUN composer install && \
     cp .env.production .env && \
-    php artisan key:generate
+    php artisan key:generate && \
+    chmod -R 777 storage
 
 WORKDIR /var/www/html
