@@ -93,7 +93,7 @@ jobs:
         with:
           task-definition: ${{ env.ECS_TASK_DEFINITION }}
           container-name: rese-nginx
-          image: ${{ steps.build-image.outputs.image }}
+          image: ${{ steps.build-image-nginx.outputs.image }}
 
       - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def-laravel
@@ -101,7 +101,7 @@ jobs:
         with:
           task-definition: ${{ env.ECS_TASK_DEFINITION }}
           container-name: rese-laravel
-          image: ${{ steps.build-image.outputs.image }}
+          image: ${{ steps.build-image-laravel.outputs.image }}
 
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
