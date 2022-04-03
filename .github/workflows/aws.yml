@@ -99,7 +99,7 @@ jobs:
         id: task-def-laravel
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          task-definition: ${{ env.ECS_TASK_DEFINITION }}
+          task-definition: ${{ steps.task-def-web.outputs.task-definition }}
           container-name: rese-laravel
           image: ${{ steps.build-image-laravel.outputs.image }}
 
