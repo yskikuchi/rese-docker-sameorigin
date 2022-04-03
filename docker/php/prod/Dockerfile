@@ -24,4 +24,9 @@ RUN apt-get update && \
     vim \
     && docker-php-ext-install pdo_mysql bcmath
 
+RUN composer install && \
+    cp .env.production .env && \
+    php artisan key:generate && \
+    chmod -R 777 storage
+
 WORKDIR /var/www/html
